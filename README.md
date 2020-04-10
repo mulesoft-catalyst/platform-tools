@@ -1,8 +1,10 @@
 # platform-tools
 Scripts to perform common platform related tasks
+System requirements : Python 2.X. 
 
-This script works only with Cloudhub. It works at org level and in its simplest form it takes anypoint credentials and org id. Successful execute of script generates 3 CSV files in same
-folder. ["RuntimeManagerDetails.csv", "APIManagerDetails.csv", "UserDetails.csv"]. If operator doesn't have permission in any particular environment then its skipped.
+This script works only with Cloudhub. It works at org level and in its simplest form it takes anypoint credentials and org id. Successful execution of script generates 3 CSV files in same
+folder. ["RuntimeManagerDetails.csv", "APIManagerDetails.csv", "UserDetails.csv"]. 
+If operator doesn't have permission in any particular environment then its skipped.
 
 ```
 vsharma-ltm1:Utils vikas.sharma$ python PlatformUtils.py --u "username" --p "password" -- o "org_id" 
@@ -36,7 +38,7 @@ Environment Name for anypoint platform
 RuntimeManager, UserDetails vsharma-ltm1:general vikas.sharma$ 
 ```
 
-e.g You may further filter the results by details [APIManager, RuntimeManager or UserDetails] or by environment name.
+e.g You may further filter the results by specific details [APIManager, RuntimeManager or UserDetails] or by environment name.
 e.g below query will generate only RuntimeManagerDetails.csv for Production environment.
 
 
