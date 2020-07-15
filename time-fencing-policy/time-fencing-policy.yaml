@@ -1,0 +1,60 @@
+id: TimeFencing
+name: TimeFencing
+description: Time Based Request Blocking. Select blacklist days and time range [in GMT].
+category: Custom
+type: custom
+resourceLevelSupported: true
+encryptionSupported: false
+standalone: true
+requiredCharacteristics: []
+providedCharacteristics: []
+configuration:
+- propertyName: Monday
+  name: Monday
+  description:
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: Tuesday
+  name: Tuesday
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: Wednesday
+  name: Wednesday
+  description:
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: Thursday
+  name: Thursday
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: Friday
+  name: Friday
+  description:
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: Saturday
+  name: Saturday
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: Sunday
+  name: Sunday
+  description:
+  type: boolean
+  optional: true
+  defaultValue: false
+- propertyName: startTime
+  name: startTime
+  description: startTime in GMT e.g 09:00:05
+  type: string
+  optional: false
+- propertyName: endTime
+  name: endTime
+  description: endTime in GMT e.g 15:00:00
+  type: string
+  optional: false

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:http-policy="http://www.mulesoft.org/schema/mule/http-policy"
+      xmlns:http-transform="http://www.mulesoft.org/schema/mule/http-policy-transform"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+               http://www.mulesoft.org/schema/mule/http-policy http://www.mulesoft.org/schema/mule/http-policy/current/mule-http-policy.xsd
+               http://www.mulesoft.org/schema/mule/http-policy-transform http://www.mulesoft.org/schema/mule/http-policy-transform/current/mule-http-policy-transform.xsd">
+
+
+    <http-policy:proxy name="{{{policyId}}}-custom-policy">
+        <http-policy:source>
+
+          <set-variable variableName="startTime" value="{{ startTime }}" mimeType="application/java" />
+          <set-variable variableName="endTime" value="{{ endTime }}" mimeType="application/java" />
+          <set-variable variableName="Monday" value="{{ Monday }}" mimeType="application/java" />
+          <set-variable variableName="Tuesday" value="{{ Tuesday }}" mimeType="application/java" />
+          <set-variable variableName="Wednesday" value="{{ Wednesday }}" mimeType="application/java" />
+          <set-variable variableName="Thursday" value="{{ Thursday }}" mimeType="application/java" />
+          <set-variable variableName="Friday" value="{{ Friday }}" mimeType="application/java" />
+          <set-variable variableName="Saturday" value="{{ Saturday }}" mimeType="application/java" />
+          <set-variable variableName="Sunday" value="{{ Sunday }}" mimeType="application/java" />
+          <set-variable variableName="today" value="#[now() as String {format: 'eeee'}]" mimeType="application/java" />
+          <set-variable variableName="isBlockedDay" value="#[vars[(vars.today)]]"/>
+          <set-variable variableName="isBlockedTime" value="#[(now() as String {format: 'HH:mm:ss'} as LocalTime &gt; vars.startTime as String {format: 'HH:mm:ss'} as LocalTime) and
+(now() as String {format: 'HH:mm:ss'} as LocalTime &lt; vars.endTime as String {format: 'HH:mm:ss'} as LocalTime)]"/>
+
+          <choice>
+           <when expression="#[vars.isBlockedDay and vars.isBlockedTime]" >
+             <logger level="INFO" message="#['time fencing policy trigger... ']" />
+             <http-transform:set-response statusCode="503" reasonPhrase="Service Unavailable">
+               <http-transform:body>#[output application/json --- {message: "service unavailable till: " ++ vars.endTime ++ " GMT."}]</http-transform:body>
+              </http-transform:set-response>
+            </when>
+           <otherwise>
+              <http-policy:execute-next/>
+           </otherwise>
+        </choice>
+  </http-policy:source>
+    </http-policy:proxy>
+</mule>

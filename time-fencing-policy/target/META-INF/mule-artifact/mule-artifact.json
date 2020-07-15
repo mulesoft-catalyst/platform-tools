@@ -1,0 +1,24 @@
+{
+  "configs": [
+    "template.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "2b1cfdbb-a5bf-4e2b-9e9c-cd3302fcae59:time-fencing-policy:1.0.0",
+  "minMuleVersion": "4.1.1",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {}
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {
+      "groupId": "2b1cfdbb-a5bf-4e2b-9e9c-cd3302fcae59",
+      "classifier": "mule-policy",
+      "artifactId": "time-fencing-policy",
+      "type": "jar",
+      "version": "1.0.0"
+    }
+  }
+}
