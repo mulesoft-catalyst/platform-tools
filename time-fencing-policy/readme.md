@@ -1,1 +1,1 @@
-** Time Fencing Policy
+This policy blocks requests to HTTP endpoints based on day and time. Specify the day of weeks and time range and request will be blocked for those days and that time period. This is not meant to block requests one time. 
