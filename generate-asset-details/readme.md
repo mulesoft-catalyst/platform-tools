@@ -50,3 +50,28 @@ INFO:root:Generating Runtime Applications Details for environment : [Production]
  vsharma-ltm1:general vikas.sharma$ ls -l RuntimeManagerDetails.csv
  -rw-r--r--@ 1 vikas.sharma 454177323 9511 Dec 11 15:38 RuntimeManagerDetails.csv 
  ```
+ 
+ 
+ 
+ 
+ # ManageInactiveApplications.py
+ 
+ This is a utility to list down and stop stale applications if required. It produces output of inactive applications and takes threshold as input [like 20h  or 7d ]. This works in 2 modes. 
+ 
+ - In non interactive mode, it will produce output which lists applications which have not received any traffic since last provided threshold limit. e.g list of apps inactive for last N days or N hours.
+ 
+ ``` > python ManageInactiveApplications.py --u username --p pwd --o org-id --t 5d ``` [   Inactive apps for last 5 days].  
+ ``` > python ManageInactiveApplications.py --u 'username' --p pwd --o 'org-id' --t 48h ``` [Inactive apps for last 48 hours ]. 
+ 
+ 
+ - Interactive mode, In addition to providing above list, for each application it will ask if user wants to stop the running application. Upon confirmation it stops the running application. 
+ 
+ ``` > python ManageInactiveApplications.py --u username --p pwd --o org-id --t 5d --i y ```
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
