@@ -67,6 +67,38 @@ INFO:root:Generating Runtime Applications Details for environment : [Production]
  - Interactive mode, In addition to providing above list, for each application it will ask if user wants to stop the running application. Upon confirmation it stops the running application. 
  
  ``` > python ManageInactiveApplications.py --u username --p pwd --o org-id --t 5d --i y ```
+ 
+ 
+ 
+ 
+ 
+ Alternatively, you can pull this docker image to run the utility. Its useful in scenerios where python dependencies are not installed on host system.
+
+ ``` 
+ vsharma-ltm1:manage-stale-apps-docker-build vikas.sharma$ docker pull vs193928/mulesoft:manage-stale-apps
+manage-stale-apps: Pulling from vs193928/mulesoft
+Digest: sha256:6c84ba6ad9aed58c93064129e8cbd50035819a4fdc2d9ea641513dc8d010761e
+Status: Image is up to date for vs193928/mulesoft:manage-stale-apps
+docker.io/vs193928/mulesoft:manage-stale-apps
+vsharma-ltm1:manage-stale-apps-docker-build vikas.sharma$ docker images
+REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
+vs193928/mulesoft        manage-stale-apps   575ec6b064d3        2 hours ago         893MB
+----
+----
+----
+
+
+vsharma-ltm1:manage-stale-apps-docker-build vikas.sharma$ docker run vs193928/mulesoft:manage-stale-apps --u vikas_mule --p xxxx --o [ORG_ID]
+INFO:root:Organization Data Inititializing.. 
+Org Name: XXXXXXX   ||    Environment: Design   ||    Service Name: web-pqdj   ||    Time (Hours) Elapsed Since Last Event: 480.0
+Org Name: XXXXXXX   ||    Environment: Design   ||    Service Name: XXX   ||    Time (Hours) Elapsed Since Last Event: 480.0
+Org Name: XXXXXXX   ||    Environment: DEV   ||    Service Name: XXXX   ||    Time (Hours) Elapsed Since Last Event: 480.0
+Org Name: XXXXXXX   ||    Environment: DEV   ||    Service Name: XXXX   ||    Time (Hours) Elapsed Since Last Event: 480.0
+Org Name: XXXXXXX   ||    Environment: DEV   ||    Service Name: XXXX   ||    Time (Hours) Elapsed Since Last Event: 480.0
+Org Name: XXXXXXX   ||    Environment: PROD   ||    Service Name: XXXX   ||    Time (Hours) Elapsed Since Last Event: 480.0
+Org Name: XXXXXXX   ||    Environment: PROD   ||    Service Name: XXXX   ||    Time (Hours) Elapsed Since Last Event: 480.0
+
+```
 
  
  
