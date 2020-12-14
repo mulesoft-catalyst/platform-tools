@@ -2,6 +2,9 @@
 
 Scripts to perform common platform related tasks. <br/>
 (**System requirements : Python 2.X**)
+Windows users might get SSL issues while running the script. To resolve it, use the below module before running the script. 
+
+**pip install python-certifi-win32**
 
 This script works only with Cloudhub. It works at org level and in its simplest form it takes anypoint credentials and org id. Successful execution of script generates 3 CSV files in same
 folder. ["RuntimeManagerDetails.csv", "APIManagerDetails.csv", "UserDetails.csv"]. 
