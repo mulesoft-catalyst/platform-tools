@@ -201,7 +201,7 @@ if args.f != None and ((args.i).capitalize() == "Y" or (args.i).capitalize() == 
 
 
 if args.f != None:
-    inactive_app_data_file = open(args.f, 'a')
+    inactive_app_data_file = open(args.f, 'w')
     csvwriter = csv.writer(inactive_app_data_file)
     keyList=["Organization","Environment","Service","Time (Hours) Elapsed Since Last Event"]
     csvwriter.writerow(keyList)
