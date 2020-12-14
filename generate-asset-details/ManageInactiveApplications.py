@@ -90,7 +90,7 @@ class Organization:
 
     def generateCHRuntimeDetails(self,requestedTimeSinceLastTraffic,interactive):
 
-      #  print('BusinessOrg ------------------ Environment------------------ServiceName------------------TimeSinceLastTraffic')
+        #  print('BusinessOrg ------------------ Environment------------------ServiceName------------------TimeSinceLastTraffic')
         url = "https://anypoint.mulesoft.com/cloudhub/api/v2/applications"
 
 
@@ -106,6 +106,9 @@ class Organization:
                         timeSinceLastEvent = Organization.getTimeSinceLastEvent(servicenode["domain"],env.get("env_id"), env.get("org_id"),self.token)
                         if timeSinceLastEvent > float(requestedTimeSinceLastTraffic):
                             print("Org Name: " + env.get("org_name") + "   ||    Environment: " + env["env_name"] + '   ||    Service Name: ' + servicenode["domain"] + '   ||    Time (Hours) Elapsed Since Last Event: ' + str(timeSinceLastEvent))
+                            if args.f != None:
+                                currentrecord = [env.get("org_name"),env["env_name"],servicenode["domain"],str(timeSinceLastEvent) ]
+                                csvwriter.writerow(currentrecord)
                             if str(interactive).capitalize() == "Y" or str(interactive).capitalize() == "YES":
                                 ans = input("Stop Application - " + servicenode["domain"] + " (y/n)? : ")
                                 if ans.capitalize() == "Y" or ans.capitalize() == "YES":
@@ -152,8 +155,8 @@ class Organization:
 
 
 
-#############################################################################################################################
-#############################################################################################################################
+    #############################################################################################################################
+    #############################################################################################################################
 
     @staticmethod
     def stopapplication(domainName,token,env_id,org_id):
@@ -181,12 +184,27 @@ parser.add_argument("--p", required=True, help="password for anypoint platform")
 parser.add_argument("--o", required=True, help="Organization Name for anypoint platform")
 parser.add_argument("--t", help="Inactive Time e.g 5h (5 hours), 7d (7 days)", default= "14d")
 parser.add_argument("--i", help="Interactive Mode to Stop applications", default= "N")
+parser.add_argument("--f", help="file name to generate output in csv format")
+
+
+
 
 
 args = parser.parse_args()
 logging.basicConfig(level=logging.INFO)
 
 
+
+if args.f != None and ((args.i).capitalize() == "Y" or (args.i).capitalize() == "Yes"):
+    logging.error("!! Can't use interactive option with file output")
+    quit()
+
+
+if args.f != None:
+    inactive_app_data_file = open(args.f, 'a')
+    csvwriter = csv.writer(inactive_app_data_file)
+    keyList=["Organization","Environment","Service","Time (Hours) Elapsed Since Last Event"]
+    csvwriter.writerow(keyList)
 
 org = Organization(args.u,args.p,args.o)
 requestedTimeSinceLastTraffic = 0
@@ -201,5 +219,3 @@ else:
 
 
 org.generateCHRuntimeDetails(requestedTimeSinceLastTraffic, args.i)
-
-#    org.generateCHRuntimeDetails()
