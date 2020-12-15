@@ -88,9 +88,15 @@ class Organization:
     #############################################################################################################################
     #############################################################################################################################
 
-    def generateCHRuntimeDetails(self,requestedTimeSinceLastTraffic,interactive):
+    def generateCHRuntimeDetails(self,requestedTimeSinceLastTraffic,interactive, fileOutput):
 
-        #  print('BusinessOrg ------------------ Environment------------------ServiceName------------------TimeSinceLastTraffic')
+        if fileOutput != None:
+            inactive_app_data_file = open(fileOutput, 'w')
+            csvwriter = csv.writer(inactive_app_data_file)
+            keyList=["Organization","Environment","Service","Time (Hours) Elapsed Since Last Event"]
+            csvwriter.writerow(keyList)
+
+
         url = "https://anypoint.mulesoft.com/cloudhub/api/v2/applications"
 
 
@@ -106,7 +112,7 @@ class Organization:
                         timeSinceLastEvent = Organization.getTimeSinceLastEvent(servicenode["domain"],env.get("env_id"), env.get("org_id"),self.token)
                         if timeSinceLastEvent > float(requestedTimeSinceLastTraffic):
                             print("Org Name: " + env.get("org_name") + "   ||    Environment: " + env["env_name"] + '   ||    Service Name: ' + servicenode["domain"] + '   ||    Time (Hours) Elapsed Since Last Event: ' + str(timeSinceLastEvent))
-                            if args.f != None:
+                            if fileOutput != None:
                                 currentrecord = [env.get("org_name"),env["env_name"],servicenode["domain"],str(timeSinceLastEvent) ]
                                 csvwriter.writerow(currentrecord)
                             if str(interactive).capitalize() == "Y" or str(interactive).capitalize() == "YES":
@@ -175,47 +181,41 @@ class Organization:
 
 
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--u", required=True, help="username for anypoint platform")
+    parser.add_argument("--p", required=True, help="password for anypoint platform")
+    parser.add_argument("--o", required=True, help="Organization Name for anypoint platform")
+    parser.add_argument("--t", help="Inactive Time e.g 5h (5 hours), 7d (7 days)", default= "14d")
+    parser.add_argument("--i", help="Interactive Mode to Stop applications", default= "N")
+    parser.add_argument("--f", help="file name to generate output in csv format")
+
+    args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO)
+
+    if args.f != None and ((args.i).capitalize() == "Y" or (args.i).capitalize() == "Yes"):
+        logging.error("!! Can't use interactive option with file output")
+        quit()
 
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--u", required=True, help="username for anypoint platform")
-parser.add_argument("--p", required=True, help="password for anypoint platform")
-parser.add_argument("--o", required=True, help="Organization Name for anypoint platform")
-parser.add_argument("--t", help="Inactive Time e.g 5h (5 hours), 7d (7 days)", default= "14d")
-parser.add_argument("--i", help="Interactive Mode to Stop applications", default= "N")
-parser.add_argument("--f", help="file name to generate output in csv format")
+    org = Organization(args.u,args.p,args.o)
+    requestedTimeSinceLastTraffic = 0
+
+    if args.t[-1] == "D" or args.t[-1] == "d":
+        requestedTimeSinceLastTraffic = float(args.t[:-1]) * 24
+    elif args.t[-1] == "h" or args.t[-1] == "H":
+        requestedTimeSinceLastTraffic = args.t[:-1]
+    else:
+        logging.error("!! Error: Invalid Time Format")
+        quit()
+
+    org.generateCHRuntimeDetails(requestedTimeSinceLastTraffic, args.i, args.f)
 
 
 
+#############################################################################################################################
+#############################################################################################################################
 
-
-args = parser.parse_args()
-logging.basicConfig(level=logging.INFO)
-
-
-
-if args.f != None and ((args.i).capitalize() == "Y" or (args.i).capitalize() == "Yes"):
-    logging.error("!! Can't use interactive option with file output")
-    quit()
-
-
-if args.f != None:
-    inactive_app_data_file = open(args.f, 'w')
-    csvwriter = csv.writer(inactive_app_data_file)
-    keyList=["Organization","Environment","Service","Time (Hours) Elapsed Since Last Event"]
-    csvwriter.writerow(keyList)
-
-org = Organization(args.u,args.p,args.o)
-requestedTimeSinceLastTraffic = 0
-
-if args.t[-1] == "D" or args.t[-1] == "d":
-    requestedTimeSinceLastTraffic = float(args.t[:-1]) * 24
-elif args.t[-1] == "h" or args.t[-1] == "H":
-    requestedTimeSinceLastTraffic = args.t[:-1]
-else:
-    logging.error("!! Error: Invalid Time Format")
-    quit()
-
-
-org.generateCHRuntimeDetails(requestedTimeSinceLastTraffic, args.i)
+if __name__ == "__main__":
+    main()
